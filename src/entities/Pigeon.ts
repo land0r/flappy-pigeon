@@ -228,6 +228,11 @@ export class Pigeon implements GameEntity {
   }
 
   public isOutOfBounds(canvasWidth: number, canvasHeight: number): boolean {
-    return this.y < 0 || this.y + this.size > canvasHeight || this.x + this.size < 0 || this.x > canvasWidth;
+    return (
+      this.y < 0 ||
+      this.y + this.size > canvasHeight ||
+      this.x + this.size < 0 ||
+      this.x > canvasWidth
+    );
   }
 }

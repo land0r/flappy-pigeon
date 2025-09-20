@@ -1,4 +1,6 @@
 import { BRAND_COLORS } from '../config/GameConfig.js';
+import { Pigeon } from '../entities/Pigeon.js';
+import { Pipe } from '../entities/Pipe.js';
 
 export class GameRenderer {
   private context: CanvasRenderingContext2D;
@@ -88,7 +90,7 @@ export class GameRenderer {
     this.context.restore();
   }
 
-  public renderDebugBounds(pigeon: any, pipes: any[]): void {
+  public renderDebugBounds(pigeon: Pigeon, pipes: Pipe[]): void {
     // Optional debug rendering for collision bounds
     this.context.save();
     this.context.strokeStyle = 'red';
