@@ -38,8 +38,9 @@ class Application {
         canvas.height = GAME_CONFIG.CANVAS_HEIGHT;
     }
     setupEventHandlers() {
-        if (!this.gameEngine)
+        if (!this.gameEngine) {
             return;
+        }
         // Handle page visibility changes to pause/resume game
         document.addEventListener('visibilitychange', () => {
             if (document.hidden && this.gameEngine) {

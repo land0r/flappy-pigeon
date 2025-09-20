@@ -8,27 +8,31 @@ A simple Flappy Bird clone featuring a pigeon, built with HTML5 Canvas and TypeS
 🎮 **Full Game Mechanics**: Physics, collision detection, scoring, and state management  
 🎨 **Brand Colors**: Uses official WP Mail SMTP color palette  
 📱 **Mobile Support**: Touch controls and responsive design  
-⚡ **Modern Architecture**: Clean TypeScript with separation of concerns  
+⚡ **Modern Architecture**: Clean TypeScript with separation of concerns
 
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js and npm installed
 - A modern web browser with HTML5 Canvas support
 
 ### Installation and Running
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
 2. Build the TypeScript code:
+
 ```bash
 npm run build
 ```
 
 3. Start a local server:
+
 ```bash
 npm run serve
 ```
@@ -38,25 +42,40 @@ npm run serve
 ### Development
 
 **🔥 Best Development Experience (Hot Reload):**
+
 ```bash
 npm run dev
 ```
+
 This runs TypeScript watch + live-server with automatic browser refresh.
 
 **Individual Commands:**
+
 ```bash
-npm run watch    # TypeScript watch mode only
-npm run serve    # Basic Python server only  
-npm run clean    # Clean build directory
-npm run start    # Build + serve (production-like)
+npm run watch       # TypeScript watch mode only
+npm run serve       # Basic Python server only
+npm run clean       # Clean build directory
+npm run start       # Build + serve (production-like)
+```
+
+**Code Quality:**
+
+```bash
+npm run lint        # Check TypeScript code with ESLint
+npm run lint:fix    # Auto-fix ESLint issues
+npm run format      # Format all files with Prettier
+npm run format:check # Check if files are formatted
+npm run check       # Run lint + format check + build
 ```
 
 **🚀 Hot Reload Features:**
+
 - ⚡ **Instant refresh** - Browser reloads automatically on file changes
-- 🔄 **Smart watching** - Monitors dist/ and index.html changes  
+- 🔄 **Smart watching** - Monitors dist/ and index.html changes
 - 🎯 **Fast feedback** - See changes immediately
 
 **VS Code Users:**
+
 - Press `Ctrl+Shift+P` → "Tasks: Run Task" → "Start Development Server"
 - Or use the integrated TypeScript watch task
 
@@ -96,6 +115,13 @@ src/
 - **State Pattern**: Clean game state management
 - **Dependency Injection**: Components receive dependencies through constructors
 
+### Code Quality Tools
+
+- **ESLint**: TypeScript linting with strict rules
+- **Prettier**: Automatic code formatting for TS/HTML/CSS/JSON
+- **VS Code Integration**: Auto-format on save and lint on type
+- **Pre-commit Checks**: `npm run check` validates code before commits
+
 ## Completed Tasks
 
 ✅ **Task 1**: Project structure and HTML5 Canvas foundation  
@@ -107,6 +133,7 @@ src/
 ## Brand Integration
 
 The game uses the official WP Mail SMTP brand colors:
+
 - `#395360` - Dark blue-gray (pipes, outlines)
 - `#809EB0` - Medium blue-gray (pigeon body, sky)
 - `#BDCFC8` - Light gray-green (pigeon head/chest, ground)
