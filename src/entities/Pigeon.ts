@@ -110,13 +110,18 @@ export class Pigeon implements GameEntity {
     // Draw the sprite frame centered
     context.drawImage(
       this.spriteSheet,
-      sourceX, sourceY, this.frameWidth, this.frameHeight,
-      -this.size / 2, -this.size / 2, this.size, this.size
+      sourceX,
+      sourceY,
+      this.frameWidth,
+      this.frameHeight,
+      -this.size / 2,
+      -this.size / 2,
+      this.size,
+      this.size
     );
 
     context.restore();
   }
-
 
   public getBounds(): Rectangle {
     return {

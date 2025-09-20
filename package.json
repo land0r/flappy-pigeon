@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A simple Flappy Bird clone featuring a pigeon",
   "main": "dist/main.js",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "dev": "concurrently \"npm run watch\" \"live-server --port=8000 --watch=dist,index.html --wait=200\"",
