@@ -6,6 +6,7 @@ import { PipeManager } from '../managers/PipeManager.js';
 import { ScoreManager } from '../managers/ScoreManager.js';
 import { GameRenderer } from '../renderers/GameRenderer.js';
 import { GameState, InputType } from '../types/GameTypes.js';
+import { CanvasDimensions, ResponsiveCanvas } from '../utils/ResponsiveCanvas.js';
 
 export class GameEngine {
   private canvas: HTMLCanvasElement;
@@ -21,6 +22,10 @@ export class GameEngine {
   private pipeManager!: PipeManager;
   private scoreManager!: ScoreManager;
   private renderer!: GameRenderer;
+
+  // Responsive canvas support
+  private responsiveCanvas: ResponsiveCanvas | null = null;
+  private currentDimensions: CanvasDimensions | null = null;
 
   // Game state
   private debugMode: boolean = false;
@@ -265,5 +270,48 @@ export class GameEngine {
     this.gameState = GameState.GAME_OVER;
     this.audioManager.playSound('gameOver');
     console.log('Game over');
+  }
+
+  // Responsive canvas support methods
+  public setResponsiveCanvas(responsiveCanvas: ResponsiveCanvas): void {
+    this.responsiveCanvas = responsiveCanvas;
+    this.currentDimensions = responsiveCanvas.getCurrentDimensions();
+
+    // Pass responsive canvas to renderer
+    if (this.renderer) {
+      this.renderer.setResponsiveCanvas(responsiveCanvas);
+    }
+  }
+
+  public handleResize(dimensions: CanvasDimensions): void {
+    this.currentDimensions = dimensions;
+
+    // Update pigeon position to maintain relative position
+    if (this.pigeon && this.responsiveCanvas) {
+      const relativeY = 0.5; // Center vertically
+
+      const newX = this.responsiveCanvas.scaleCoordinate(150, true);
+      const newY = dimensions.height * relativeY - this.getScaledPigeonSize() / 2;
+
+      this.pigeon.reset(newX, newY);
+
+      // Update pipe manager with new dimensions
+      if (this.pipeManager && this.pipeManager.handleResize) {
+        this.pipeManager.handleResize(dimensions);
+      }
+
+      console.log(`Game engine handling resize: ${dimensions.width}x${dimensions.height}`);
+    }
+  }
+
+  public getCurrentDimensions(): CanvasDimensions | null {
+    return this.currentDimensions;
+  }
+
+  private getScaledPigeonSize(): number {
+    if (this.responsiveCanvas) {
+      return this.responsiveCanvas.scaleSize(GAME_CONFIG.PIGEON_SIZE);
+    }
+    return GAME_CONFIG.PIGEON_SIZE;
   }
 }

@@ -27,6 +27,19 @@ export const CLOUD_CONFIG = {
   Y_VARIANCE: 100,
 } as const;
 
+// Responsive design configuration
+export const RESPONSIVE_CONFIG = {
+  BASE_WIDTH: 800,
+  BASE_HEIGHT: 600,
+  MIN_WIDTH: 320,
+  MIN_HEIGHT: 240,
+  MAX_WIDTH: 1200,
+  MAX_HEIGHT: 900,
+  ASPECT_RATIO: 4 / 3, // 800:600 ratio
+  MOBILE_BREAKPOINT: 768,
+  SCALE_FACTOR_MOBILE: 0.8, // Scale down elements on mobile
+} as const;
+
 // Brand colors from WP Mail SMTP
 export const BRAND_COLORS = {
   darkBlue: '#395360', // Dark blue-gray

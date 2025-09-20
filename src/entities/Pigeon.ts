@@ -254,4 +254,9 @@ export class Pigeon implements GameEntity {
       this.x > canvasWidth
     );
   }
+
+  public setPosition(x: number, y: number): void {
+    this.x = x;
+    this.y = y;
+  }
 }

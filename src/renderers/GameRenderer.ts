@@ -2,11 +2,13 @@ import { BRAND_COLORS, CLOUD_CONFIG } from '../config/GameConfig.js';
 import { Pigeon } from '../entities/Pigeon.js';
 import { Pipe } from '../entities/Pipe.js';
 import { Cloud } from '../types/GameTypes.js';
+import { ResponsiveCanvas } from '../utils/ResponsiveCanvas.js';
 
 export class GameRenderer {
   private context: CanvasRenderingContext2D;
   private canvas: HTMLCanvasElement;
   private clouds: Cloud[];
+  private responsiveCanvas: ResponsiveCanvas | null = null;
 
   constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     this.canvas = canvas;
@@ -50,7 +52,7 @@ export class GameRenderer {
 
     // Title
     this.context.fillStyle = '#333';
-    this.context.font = 'bold 48px Arial';
+    this.context.font = `bold ${this.getResponsiveFontSize(48)}`;
     this.context.textAlign = 'center';
     this.context.textBaseline = 'middle';
 
@@ -64,7 +66,7 @@ export class GameRenderer {
 
     // High score display
     if (highScore && highScore > 0) {
-      this.context.font = '20px Arial';
+      this.context.font = this.getResponsiveFontSize(20);
       this.context.fillStyle = '#666';
       this.context.shadowBlur = 1;
       this.context.fillText(
@@ -76,28 +78,28 @@ export class GameRenderer {
 
     // Instructions
     this.context.fillStyle = '#333';
-    this.context.font = '24px Arial';
+    this.context.font = this.getResponsiveFontSize(24);
     this.context.shadowBlur = 2;
     this.context.fillText(
       'Click or press SPACE to start',
       this.canvas.width / 2,
-      this.canvas.height / 2 - 20
+      this.canvas.height / 2 - this.getResponsiveSize(20)
     );
 
-    this.context.font = '18px Arial';
+    this.context.font = this.getResponsiveFontSize(18);
     this.context.fillText(
       'Navigate through the pipes to score points!',
       this.canvas.width / 2,
-      this.canvas.height / 2 + 20
+      this.canvas.height / 2 + this.getResponsiveSize(20)
     );
 
     // Controls
-    this.context.font = '16px Arial';
+    this.context.font = this.getResponsiveFontSize(16);
     this.context.fillStyle = '#666';
     this.context.fillText(
       'Controls: Click, SPACE to flap | P to pause',
       this.canvas.width / 2,
-      this.canvas.height / 2 + 60
+      this.canvas.height / 2 + this.getResponsiveSize(60)
     );
 
     this.context.restore();
@@ -124,39 +126,63 @@ export class GameRenderer {
   }
 
   private renderScoreDisplay(score: number): void {
+    const bgWidth = this.getResponsiveSize(160);
+    const bgHeight = this.getResponsiveSize(50);
+    const bgX = this.canvas.width / 2 - bgWidth / 2;
+    const bgY = this.getResponsiveSize(10);
+
     // Score background
     this.context.fillStyle = 'rgba(0, 0, 0, 0.3)';
-    this.context.fillRect(this.canvas.width / 2 - 80, 10, 160, 50);
+    this.context.fillRect(bgX, bgY, bgWidth, bgHeight);
 
     // Score border
     this.context.strokeStyle = 'rgba(255, 255, 255, 0.5)';
     this.context.lineWidth = 2;
-    this.context.strokeRect(this.canvas.width / 2 - 80, 10, 160, 50);
+    this.context.strokeRect(bgX, bgY, bgWidth, bgHeight);
 
     // Score text with enhanced styling
     this.context.fillStyle = '#FFF';
-    this.context.font = 'bold 28px Arial, sans-serif';
+    this.context.font = `bold ${this.getResponsiveFontSize(28)}`;
     this.context.textAlign = 'center';
     this.context.textBaseline = 'middle';
     this.context.shadowColor = 'rgba(0, 0, 0, 0.8)';
     this.context.shadowBlur = 4;
     this.context.shadowOffsetX = 2;
     this.context.shadowOffsetY = 2;
-    this.context.fillText(`Score: ${score}`, this.canvas.width / 2, 35);
+    this.context.fillText(`Score: ${score}`, this.canvas.width / 2, bgY + bgHeight / 2);
   }
 
   private renderInstructions(): void {
-    this.context.fillStyle = 'rgba(0, 0, 0, 0.6)';
-    this.context.fillRect(5, 5, 200, 70);
+    const isMobile = this.responsiveCanvas?.getCurrentDimensions().isMobile || false;
 
-    this.context.fillStyle = '#FFF';
-    this.context.font = '14px Arial, sans-serif';
-    this.context.textAlign = 'left';
-    this.context.shadowColor = 'rgba(0, 0, 0, 0.8)';
-    this.context.shadowBlur = 2;
-    this.context.fillText('Click or SPACE to flap', 10, 20);
-    this.context.fillText('Press P to pause', 10, 40);
-    this.context.fillText('Press M to mute/unmute', 10, 60);
+    if (isMobile) {
+      // Mobile: smaller, simpler box
+      this.context.fillStyle = 'rgba(0, 0, 0, 0.6)';
+      this.context.fillRect(5, 5, 120, 40);
+
+      this.context.fillStyle = '#FFF';
+      this.context.font = '10px Arial, sans-serif';
+      this.context.textAlign = 'left';
+      this.context.shadowColor = 'rgba(0, 0, 0, 0.8)';
+      this.context.shadowBlur = 2;
+
+      this.context.fillText('Tap to flap', 10, 20);
+      this.context.fillText('P: pause | M: mute', 10, 35);
+    } else {
+      // Desktop: original size
+      this.context.fillStyle = 'rgba(0, 0, 0, 0.6)';
+      this.context.fillRect(5, 5, 200, 70);
+
+      this.context.fillStyle = '#FFF';
+      this.context.font = '14px Arial, sans-serif';
+      this.context.textAlign = 'left';
+      this.context.shadowColor = 'rgba(0, 0, 0, 0.8)';
+      this.context.shadowBlur = 2;
+
+      this.context.fillText('Click or SPACE to flap', 10, 20);
+      this.context.fillText('Press P to pause', 10, 40);
+      this.context.fillText('Press M to mute/unmute', 10, 60);
+    }
   }
 
   private renderAudioStatus(isMuted: boolean): void {
@@ -461,5 +487,24 @@ export class GameRenderer {
 
   public clear(): void {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  public setResponsiveCanvas(responsiveCanvas: ResponsiveCanvas): void {
+    this.responsiveCanvas = responsiveCanvas;
+  }
+
+  private getResponsiveFontSize(baseFontSize: number): string {
+    if (this.responsiveCanvas) {
+      const scaledSize = this.responsiveCanvas.scaleSize(baseFontSize);
+      return `${Math.max(12, scaledSize)}px Arial, sans-serif`; // Minimum 12px font
+    }
+    return `${baseFontSize}px Arial, sans-serif`;
+  }
+
+  private getResponsiveSize(baseSize: number): number {
+    if (this.responsiveCanvas) {
+      return this.responsiveCanvas.scaleSize(baseSize);
+    }
+    return baseSize;
   }
 }

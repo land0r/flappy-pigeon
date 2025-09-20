@@ -2,6 +2,7 @@ import { GAME_CONFIG } from '../config/GameConfig.js';
 import { Pigeon } from '../entities/Pigeon.js';
 import { Pipe } from '../entities/Pipe.js';
 import { Rectangle } from '../types/GameTypes.js';
+import { CanvasDimensions } from '../utils/ResponsiveCanvas.js';
 
 export class PipeManager {
   private pipes: Pipe[] = [];
@@ -100,5 +101,10 @@ export class PipeManager {
 
   public getPipes(): Pipe[] {
     return this.pipes;
+  }
+
+  public handleResize(dimensions: CanvasDimensions): void {
+    this.canvasHeight = dimensions.height;
+    console.log(`PipeManager handling resize: canvas height updated to ${dimensions.height}`);
   }
 }

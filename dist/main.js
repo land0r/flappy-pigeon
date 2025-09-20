@@ -1,6 +1,6 @@
-import { GAME_CONFIG } from './config/GameConfig.js';
 import { GameEngine } from './core/GameEngine.js';
 import { GameState } from './types/GameTypes.js';
+import { ResponsiveCanvas } from './utils/ResponsiveCanvas.js';
 /**
  * Main entry point for Flappy Pigeon game
  * Initializes the game engine and handles application lifecycle
@@ -8,16 +8,23 @@ import { GameState } from './types/GameTypes.js';
 class Application {
     constructor() {
         this.gameEngine = null;
+        this.responsiveCanvas = null;
     }
     async initialize() {
         try {
             // Get canvas element
             const canvas = this.getCanvasElement();
-            // Set canvas dimensions
-            this.setupCanvas(canvas);
+            const context = this.getCanvasContext(canvas);
+            // Setup responsive canvas system
+            this.responsiveCanvas = new ResponsiveCanvas(canvas, context);
+            this.responsiveCanvas.setResizeCallback(this.handleCanvasResize.bind(this));
             // Create and initialize the game engine
             this.gameEngine = new GameEngine(canvas);
             await this.gameEngine.initialize();
+            // Pass responsive canvas to game engine
+            if (this.gameEngine.setResponsiveCanvas) {
+                this.gameEngine.setResponsiveCanvas(this.responsiveCanvas);
+            }
             this.gameEngine.start();
             // Setup application event handlers
             this.setupEventHandlers();
@@ -34,9 +41,18 @@ class Application {
         }
         return canvas;
     }
-    setupCanvas(canvas) {
-        canvas.width = GAME_CONFIG.CANVAS_WIDTH;
-        canvas.height = GAME_CONFIG.CANVAS_HEIGHT;
+    getCanvasContext(canvas) {
+        const context = canvas.getContext('2d');
+        if (!context) {
+            throw new Error('Could not get 2D rendering context');
+        }
+        return context;
+    }
+    handleCanvasResize(dimensions) {
+        // Notify game engine about canvas resize if it supports it
+        if (this.gameEngine && this.gameEngine.handleResize) {
+            this.gameEngine.handleResize(dimensions);
+        }
     }
     setupEventHandlers() {
         if (!this.gameEngine) {
@@ -64,6 +80,10 @@ class Application {
         if (this.gameEngine) {
             this.gameEngine.stop();
             this.gameEngine = null;
+        }
+        if (this.responsiveCanvas) {
+            this.responsiveCanvas.cleanup();
+            this.responsiveCanvas = null;
         }
     }
 }
