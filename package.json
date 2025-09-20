@@ -9,7 +9,7 @@
     "dev": "concurrently \"npm run watch\" \"live-server --port=8000 --watch=dist,index.html --wait=200\"",
     "watch": "tsc --watch",
     "start": "npm run build && npm run serve",
-    "serve": "python3 -m http.server 8000",
+    "serve": "live-server --port=8000 --no-css-inject --ignore=src,node_modules",
     "clean": "rm -rf dist"
   },
   "keywords": [
