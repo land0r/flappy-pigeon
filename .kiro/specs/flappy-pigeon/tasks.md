@@ -37,7 +37,7 @@
   - Test collision accuracy with different pigeon positions and rotations
   - _Requirements: 2.4_
 
-- [ ] 6. Implement scoring system
+- [x] 6. Implement scoring system
   - Create ScoreManager class to track current score and high score
   - Add logic to detect when pigeon successfully passes through pipe gap
   - Increment score when pigeon passes pipes and prevent double-counting

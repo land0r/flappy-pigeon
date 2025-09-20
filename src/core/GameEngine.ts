@@ -2,6 +2,7 @@ import { GAME_CONFIG } from '../config/GameConfig.js';
 import { Pigeon } from '../entities/Pigeon.js';
 import { InputManager } from '../managers/InputManager.js';
 import { PipeManager } from '../managers/PipeManager.js';
+import { ScoreManager } from '../managers/ScoreManager.js';
 import { GameRenderer } from '../renderers/GameRenderer.js';
 import { GameState, InputType } from '../types/GameTypes.js';
 
@@ -16,10 +17,10 @@ export class GameEngine {
   private inputManager!: InputManager;
   private pigeon!: Pigeon;
   private pipeManager!: PipeManager;
+  private scoreManager!: ScoreManager;
   private renderer!: GameRenderer;
 
   // Game state
-  private score: number;
   private debugMode: boolean = false;
 
   constructor(canvas: HTMLCanvasElement) {
@@ -34,7 +35,6 @@ export class GameEngine {
     this.gameState = GameState.MENU;
     this.lastFrameTime = 0;
     this.animationId = null;
-    this.score = 0;
 
     // Initialize managers and entities
     this.initializeComponents();
@@ -52,6 +52,9 @@ export class GameEngine {
 
     // Initialize pipe manager
     this.pipeManager = new PipeManager(this.canvas.height);
+
+    // Initialize score manager
+    this.scoreManager = new ScoreManager();
 
     // Initialize renderer
     this.renderer = new GameRenderer(this.canvas, this.context);
@@ -117,7 +120,9 @@ export class GameEngine {
 
     // Check scoring
     const newScore = this.pipeManager.checkScoring(this.pigeon);
-    this.score += newScore;
+    if (newScore > 0) {
+      this.scoreManager.addScore(newScore);
+    }
   }
 
   private render(): void {
@@ -130,14 +135,14 @@ export class GameEngine {
     // Render based on current state
     switch (this.gameState) {
       case GameState.MENU:
-        this.renderer.renderStartScreen();
+        this.renderer.renderStartScreen(this.scoreManager.getHighScore());
         break;
       case GameState.PLAYING:
         this.renderGameplay();
         break;
       case GameState.GAME_OVER:
         this.renderGameplay();
-        this.renderer.renderGameOver(this.score);
+        this.renderer.renderGameOver(this.scoreManager.getScoreData());
         break;
       case GameState.PAUSED:
         this.renderGameplay();
@@ -160,7 +165,7 @@ export class GameEngine {
 
     // Render UI
     this.renderer.renderGameUI(
-      this.score,
+      this.scoreManager.getCurrentScore(),
       this.pigeon.velocity,
       this.pipeManager.getPipes().length
     );
@@ -212,7 +217,7 @@ export class GameEngine {
     this.pipeManager.reset();
 
     // Reset score
-    this.score = 0;
+    this.scoreManager.reset();
 
     this.gameState = GameState.PLAYING;
     console.log('Game started');
@@ -222,7 +227,7 @@ export class GameEngine {
     // Reset game state and entities
     this.pigeon.reset(150, this.canvas.height / 2 - GAME_CONFIG.PIGEON_SIZE / 2);
     this.pipeManager.reset();
-    this.score = 0;
+    this.scoreManager.reset();
     this.gameState = GameState.MENU;
     console.log('Game restarted');
   }

@@ -19,7 +19,7 @@ export class GameRenderer {
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  public renderStartScreen(): void {
+  public renderStartScreen(highScore?: number): void {
     this.context.save();
 
     // Title
@@ -34,9 +34,18 @@ export class GameRenderer {
     this.context.shadowOffsetX = 2;
     this.context.shadowOffsetY = 2;
 
-    this.context.fillText('🐦 Flappy Pigeon', this.canvas.width / 2, this.canvas.height / 2 - 80);
+    this.context.fillText('🐦 Flappy Pigeon', this.canvas.width / 2, this.canvas.height / 2 - 100);
+
+    // High score display
+    if (highScore && highScore > 0) {
+      this.context.font = '20px Arial';
+      this.context.fillStyle = '#666';
+      this.context.shadowBlur = 1;
+      this.context.fillText(`High Score: ${highScore}`, this.canvas.width / 2, this.canvas.height / 2 - 60);
+    }
 
     // Instructions
+    this.context.fillStyle = '#333';
     this.context.font = '24px Arial';
     this.context.shadowBlur = 2;
     this.context.fillText(
@@ -117,7 +126,7 @@ export class GameRenderer {
     this.context.restore();
   }
 
-  public renderGameOver(score: number): void {
+  public renderGameOver(scoreData: { current: number; high: number; isNewHigh: boolean }): void {
     this.context.save();
 
     // Semi-transparent overlay
@@ -135,24 +144,36 @@ export class GameRenderer {
     this.context.shadowOffsetX = 2;
     this.context.shadowOffsetY = 2;
 
-    this.context.fillText('💀 Game Over!', this.canvas.width / 2, this.canvas.height / 2 - 60);
+    this.context.fillText('💀 Game Over!', this.canvas.width / 2, this.canvas.height / 2 - 80);
 
     // Final score
     this.context.fillStyle = '#333';
     this.context.font = '28px Arial';
     this.context.shadowBlur = 2;
     this.context.fillText(
-      `Final Score: ${score}`,
+      `Final Score: ${scoreData.current}`,
       this.canvas.width / 2,
-      this.canvas.height / 2 - 10
+      this.canvas.height / 2 - 30
     );
 
+    // High score display
+    if (scoreData.isNewHigh) {
+      this.context.fillStyle = '#FFD700'; // Gold color for new high score
+      this.context.font = '24px Arial';
+      this.context.fillText('🎉 NEW HIGH SCORE! 🎉', this.canvas.width / 2, this.canvas.height / 2 + 10);
+    } else {
+      this.context.fillStyle = '#666';
+      this.context.font = '20px Arial';
+      this.context.fillText(`High Score: ${scoreData.high}`, this.canvas.width / 2, this.canvas.height / 2 + 10);
+    }
+
     // Restart instruction
-    this.context.font = '20px Arial';
+    this.context.fillStyle = '#333';
+    this.context.font = '18px Arial';
     this.context.fillText(
       'Click or press SPACE to restart',
       this.canvas.width / 2,
-      this.canvas.height / 2 + 30
+      this.canvas.height / 2 + 50
     );
 
     this.context.restore();
