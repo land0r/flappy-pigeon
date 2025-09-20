@@ -1,0 +1,20 @@
+{
+  "enabled": true,
+  "name": "Lint & Format Code",
+  "description": "Automatically runs ESLint and Prettier to lint and format code after significant TypeScript and configuration file updates",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "src/**/*.ts",
+      "*.ts",
+      "*.js",
+      "eslint.config.js",
+      ".prettierrc.json"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "The code files have been updated. Please run the linting and formatting tools to ensure code quality and consistent formatting. Run `npx eslint . --fix` to lint and auto-fix issues, then run `npx prettier --write .` to format all files according to the project's style guidelines."
+  }
+}
