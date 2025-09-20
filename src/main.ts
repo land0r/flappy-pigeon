@@ -70,11 +70,15 @@ class Application {
 
     // Handle page visibility changes to pause/resume game
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden && this.gameEngine) {
-        // Auto-pause when tab becomes hidden
-        if (this.gameEngine.getCurrentState() === GameState.PLAYING) {
-          console.log('Tab hidden - game will auto-pause on next P key press');
+      if (this.gameEngine) {
+        if (document.hidden) {
+          // Auto-pause when tab becomes hidden
+          if (this.gameEngine.getCurrentState() === GameState.PLAYING) {
+            this.gameEngine.pauseGame();
+            console.log('Game auto-paused due to tab becoming hidden');
+          }
         }
+        // Note: We don't auto-resume when tab becomes visible to avoid unexpected gameplay
       }
     });
 

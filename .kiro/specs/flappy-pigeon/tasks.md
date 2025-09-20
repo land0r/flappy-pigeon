@@ -61,14 +61,14 @@
   - Include mute/unmute functionality and handle audio loading errors
   - _Requirements: 6.1, 6.2, 6.3, 6.5_
 
-- [ ] 9. Add responsive design and mobile support
+- [x] 9. Add responsive design and mobile support
   - Implement canvas resizing logic to maintain aspect ratio
   - Add touch event handling for mobile devices
   - Ensure game remains playable on different screen sizes
   - Test and adjust game element sizes for mobile screens
   - _Requirements: 5.4_
 
-- [ ] 10. Implement pause functionality
+- [x] 10. Implement pause functionality
   - Add pause/unpause game state and input handling
   - Ensure all game elements stop updating when paused
   - Display pause indicator and instructions on screen

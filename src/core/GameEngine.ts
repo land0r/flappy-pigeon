@@ -235,6 +235,13 @@ export class GameEngine {
     this.audioManager.toggleMute();
   }
 
+  public pauseGame(): void {
+    if (this.gameState === GameState.PLAYING) {
+      this.gameState = GameState.PAUSED;
+      console.log('Game paused programmatically');
+    }
+  }
+
   private startGame(): void {
     // Reset pigeon to starting position
     this.pigeon.reset(150, this.canvas.height / 2 - GAME_CONFIG.PIGEON_SIZE / 2);
