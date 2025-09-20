@@ -53,26 +53,98 @@ class Pigeon {
         // Move to pigeon center for rotation
         context.translate(this.x + this.size / 2, this.y + this.size / 2);
         context.rotate(this.rotation);
-        // Draw pigeon body (simple rectangle for now)
-        context.fillStyle = '#8B4513'; // Brown color
-        context.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
-        // Draw pigeon beak
-        context.fillStyle = '#FFA500'; // Orange beak
-        context.fillRect(this.size / 2 - 5, -3, 8, 6);
+        // Brand colors from WP Mail SMTP
+        const colors = {
+            darkBlue: '#395360', // Dark blue-gray
+            mediumBlue: '#809EB0', // Medium blue-gray
+            lightGray: '#BDCFC8', // Light gray-green
+            orange: '#E27730' // Orange accent
+        };
+        // Draw pigeon body (rounded, more bird-like)
+        context.fillStyle = colors.mediumBlue;
+        context.beginPath();
+        context.ellipse(0, 0, this.size / 2.2, this.size / 2.5, 0, 0, Math.PI * 2);
+        context.fill();
+        // Draw pigeon head (slightly overlapping body)
+        context.fillStyle = colors.lightGray;
+        context.beginPath();
+        context.ellipse(this.size / 6, -this.size / 6, this.size / 3.5, this.size / 3.5, 0, 0, Math.PI * 2);
+        context.fill();
+        // Draw head feathers/crest (like Pattie's distinctive top feathers)
+        context.fillStyle = colors.lightGray;
+        // Left feather
+        context.beginPath();
+        context.ellipse(this.size / 12, -this.size / 2.2, this.size / 8, this.size / 6, -0.3, 0, Math.PI * 2);
+        context.fill();
+        // Right feather
+        context.beginPath();
+        context.ellipse(this.size / 4, -this.size / 2.4, this.size / 10, this.size / 7, 0.2, 0, Math.PI * 2);
+        context.fill();
+        // Center feather (tallest)
+        context.beginPath();
+        context.ellipse(this.size / 6, -this.size / 1.9, this.size / 9, this.size / 5, 0, 0, Math.PI * 2);
+        context.fill();
+        // Draw beak (orange, more rounded like Pattie)
+        context.fillStyle = colors.orange;
+        context.beginPath();
+        context.ellipse(this.size / 2.2, -this.size / 8, this.size / 8, this.size / 12, 0, 0, Math.PI * 2);
+        context.fill();
+        // Draw beak details (nostrils)
+        context.fillStyle = '#D4611A'; // Darker orange for nostrils
+        context.beginPath();
+        context.arc(this.size / 2.4, -this.size / 7, 1, 0, Math.PI * 2);
+        context.fill();
+        context.beginPath();
+        context.arc(this.size / 2.4, -this.size / 9, 1, 0, Math.PI * 2);
+        context.fill();
         // Draw wing (animated based on flapping)
-        context.fillStyle = this.isFlapping ? '#654321' : '#8B4513';
-        const wingOffset = this.isFlapping ? -2 : 0;
-        context.fillRect(-this.size / 4, -this.size / 4 + wingOffset, this.size / 2, this.size / 3);
-        // Draw eye
-        context.fillStyle = '#000';
+        const wingColor = this.isFlapping ? colors.darkBlue : colors.mediumBlue;
+        context.fillStyle = wingColor;
+        const wingOffset = this.isFlapping ? -3 : 0;
         context.beginPath();
-        context.arc(this.size / 4, -this.size / 4, 3, 0, Math.PI * 2);
+        context.ellipse(-this.size / 8, this.size / 12 + wingOffset, this.size / 3, this.size / 4.5, -0.3, 0, Math.PI * 2);
         context.fill();
-        // Draw eye highlight
-        context.fillStyle = '#FFF';
+        // Draw wing details
+        context.fillStyle = colors.darkBlue;
         context.beginPath();
-        context.arc(this.size / 4 + 1, -this.size / 4 - 1, 1, 0, Math.PI * 2);
+        context.ellipse(-this.size / 6, this.size / 10 + wingOffset, this.size / 5, this.size / 8, -0.3, 0, Math.PI * 2);
         context.fill();
+        // Draw tail feathers
+        context.fillStyle = colors.darkBlue;
+        context.beginPath();
+        context.ellipse(-this.size / 2.2, this.size / 8, this.size / 6, this.size / 3, 0.5, 0, Math.PI * 2);
+        context.fill();
+        // Draw eye socket (oval background in custom color)
+        context.fillStyle = '#85a197'; // Custom eye socket color
+        context.beginPath();
+        context.ellipse(this.size / 5, -this.size / 5, 6, 4.5, 0, 0, Math.PI * 2);
+        context.fill();
+        // Draw eye (white eye with black pupil - more realistic for pigeon)
+        context.fillStyle = '#FFF'; // White eye
+        context.beginPath();
+        context.arc(this.size / 5, -this.size / 5, 4, 0, Math.PI * 2);
+        context.fill();
+        // Draw pupil (black circle inside the white eye)
+        context.fillStyle = '#000'; // Black pupil
+        context.beginPath();
+        context.arc(this.size / 5, -this.size / 5, 2, 0, Math.PI * 2);
+        context.fill();
+        // Draw scalloped chest feathers (like Pattie's chest pattern)
+        context.fillStyle = colors.lightGray;
+        for (let i = 0; i < 3; i++) {
+            const featherY = this.size / 6 + (i * this.size / 12);
+            const featherX = this.size / 12 + (i * this.size / 20);
+            // Draw overlapping semicircles to create scalloped pattern
+            context.beginPath();
+            context.arc(featherX - this.size / 8, featherY, this.size / 12, Math.PI, 0);
+            context.fill();
+            context.beginPath();
+            context.arc(featherX, featherY, this.size / 12, Math.PI, 0);
+            context.fill();
+            context.beginPath();
+            context.arc(featherX + this.size / 8, featherY, this.size / 12, Math.PI, 0);
+            context.fill();
+        }
         context.restore();
     }
     getBounds() {
@@ -114,17 +186,20 @@ class Pipe {
     }
     render(context) {
         context.save();
+        // Brand colors
+        const pipeColor = '#395360'; // Dark blue-gray for pipes
+        const pipeCapColor = '#E27730'; // Orange for pipe caps
         // Draw top pipe
-        context.fillStyle = '#228B22'; // Forest green
+        context.fillStyle = pipeColor;
         context.fillRect(this.x, 0, this.width, this.topHeight);
         // Draw top pipe cap
-        context.fillStyle = '#32CD32'; // Lime green
+        context.fillStyle = pipeCapColor;
         context.fillRect(this.x - 5, this.topHeight - 20, this.width + 10, 20);
         // Draw bottom pipe
-        context.fillStyle = '#228B22'; // Forest green
+        context.fillStyle = pipeColor;
         context.fillRect(this.x, this.topHeight + this.gapSize, this.width, this.bottomHeight);
         // Draw bottom pipe cap
-        context.fillStyle = '#32CD32'; // Lime green
+        context.fillStyle = pipeCapColor;
         context.fillRect(this.x - 5, this.topHeight + this.gapSize, this.width + 10, 20);
         context.restore();
     }
@@ -398,8 +473,8 @@ class GameEngine {
     }
     renderBackground() {
         const gradient = this.context.createLinearGradient(0, 0, 0, this.canvas.height);
-        gradient.addColorStop(0, '#87CEEB'); // Sky blue
-        gradient.addColorStop(1, '#98FB98'); // Light green
+        gradient.addColorStop(0, '#809EB0'); // Brand medium blue-gray (sky)
+        gradient.addColorStop(1, '#BDCFC8'); // Brand light gray-green (ground)
         this.context.fillStyle = gradient;
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
