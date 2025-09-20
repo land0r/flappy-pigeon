@@ -88,6 +88,33 @@ export class GameRenderer {
     this.context.restore();
   }
 
+  public renderDebugBounds(pigeon: any, pipes: any[]): void {
+    // Optional debug rendering for collision bounds
+    this.context.save();
+    this.context.strokeStyle = 'red';
+    this.context.lineWidth = 2;
+
+    // Draw pigeon bounds
+    const pigeonBounds = pigeon.getBounds();
+    this.context.strokeRect(
+      pigeonBounds.x,
+      pigeonBounds.y,
+      pigeonBounds.width,
+      pigeonBounds.height
+    );
+
+    // Draw pipe bounds
+    this.context.strokeStyle = 'blue';
+    for (const pipe of pipes) {
+      const pipeBounds = pipe.getBounds();
+      for (const bounds of pipeBounds) {
+        this.context.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height);
+      }
+    }
+
+    this.context.restore();
+  }
+
   public renderGameOver(score: number): void {
     this.context.save();
 

@@ -1,7 +1,7 @@
-import { Pipe } from '../entities/Pipe.js';
-import { Pigeon } from '../entities/Pigeon.js';
-import { Rectangle } from '../types/GameTypes.js';
 import { GAME_CONFIG } from '../config/GameConfig.js';
+import { Pigeon } from '../entities/Pigeon.js';
+import { Pipe } from '../entities/Pipe.js';
+import { Rectangle } from '../types/GameTypes.js';
 
 export class PipeManager {
   private pipes: Pipe[] = [];
@@ -60,6 +60,10 @@ export class PipeManager {
       // Check collision with both top and bottom pipe segments
       for (const bounds of pipeBounds) {
         if (this.rectanglesCollide(pigeonBounds, bounds)) {
+          console.log('Collision detected!', {
+            pigeon: pigeonBounds,
+            pipe: bounds,
+          });
           return true;
         }
       }

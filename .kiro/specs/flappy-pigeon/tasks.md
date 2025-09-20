@@ -30,7 +30,7 @@
   - Implement basic rectangular rendering for pipe obstacles
   - _Requirements: 2.1, 2.2, 2.3_
 
-- [ ] 5. Add collision detection between pigeon and pipes
+- [x] 5. Add collision detection between pigeon and pipes
   - Implement Rectangle interface and collision detection utility functions
   - Add collision checking between pigeon bounds and pipe bounds
   - Integrate collision detection into game loop to trigger game over state

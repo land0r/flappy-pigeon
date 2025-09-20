@@ -1,9 +1,9 @@
-import { GameState, InputType } from '../types/GameTypes.js';
 import { GAME_CONFIG } from '../config/GameConfig.js';
 import { Pigeon } from '../entities/Pigeon.js';
-import { PipeManager } from '../managers/PipeManager.js';
 import { InputManager } from '../managers/InputManager.js';
+import { PipeManager } from '../managers/PipeManager.js';
 import { GameRenderer } from '../renderers/GameRenderer.js';
+import { GameState, InputType } from '../types/GameTypes.js';
 
 export class GameEngine {
   private canvas: HTMLCanvasElement;
@@ -20,6 +20,7 @@ export class GameEngine {
 
   // Game state
   private score: number;
+  private debugMode: boolean = false;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -151,6 +152,11 @@ export class GameEngine {
 
     // Render the pigeon (foreground)
     this.pigeon.render(this.context);
+
+    // Render debug bounds if enabled (press D to toggle)
+    if (this.debugMode) {
+      this.renderer.renderDebugBounds(this.pigeon, this.pipeManager.getPipes());
+    }
 
     // Render UI
     this.renderer.renderGameUI(
