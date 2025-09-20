@@ -17,6 +17,17 @@ export interface Rectangle {
   height: number;
 }
 
+// Cloud interface for enhanced cloud rendering
+export interface Cloud {
+  x: number; // Horizontal position
+  y: number; // Vertical position
+  width: number; // Base width
+  height: number; // Base height
+  opacity: number; // Alpha transparency (0-1)
+  speed: number; // Horizontal movement speed
+  scale: number; // Size multiplier for variety
+}
+
 // Game entity base interface
 export interface GameEntity {
   x: number;

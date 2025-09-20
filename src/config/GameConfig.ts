@@ -13,6 +13,20 @@ export const GAME_CONFIG: GameConfig = {
   PIPE_WIDTH: 60,
 } as const;
 
+// Cloud configuration for enhanced rendering
+export const CLOUD_CONFIG = {
+  COUNT: 5,
+  MIN_SPEED: 0.5,
+  MAX_SPEED: 2.0,
+  MIN_SCALE: 0.8,
+  MAX_SCALE: 1.4,
+  MIN_OPACITY: 0.1,
+  MAX_OPACITY: 0.3,
+  BASE_WIDTH: 80,
+  BASE_HEIGHT: 40,
+  Y_VARIANCE: 100,
+} as const;
+
 // Brand colors from WP Mail SMTP
 export const BRAND_COLORS = {
   darkBlue: '#395360', // Dark blue-gray

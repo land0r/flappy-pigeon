@@ -1,5 +1,5 @@
+import { BRAND_COLORS, GAME_CONFIG } from '../config/GameConfig.js';
 import { GameEntity, Rectangle } from '../types/GameTypes.js';
-import { GAME_CONFIG, BRAND_COLORS } from '../config/GameConfig.js';
 
 export class Pipe implements GameEntity {
   public x: number;
@@ -35,21 +35,37 @@ export class Pipe implements GameEntity {
 
     const pipeColor = BRAND_COLORS.darkBlue;
     const pipeCapColor = BRAND_COLORS.orange;
+    const pipeHighlight = '#4A6B7A'; // Lighter shade for 3D effect
 
-    // Draw top pipe
-    context.fillStyle = pipeColor;
+    // Draw top pipe with gradient for 3D effect
+    const topGradient = context.createLinearGradient(this.x, 0, this.x + this.width, 0);
+    topGradient.addColorStop(0, pipeHighlight);
+    topGradient.addColorStop(0.3, pipeColor);
+    topGradient.addColorStop(1, pipeColor);
+
+    context.fillStyle = topGradient;
     context.fillRect(this.x, 0, this.width, this.topHeight);
 
-    // Draw top pipe cap
-    context.fillStyle = pipeCapColor;
+    // Draw top pipe cap with enhanced styling
+    const capGradient = context.createLinearGradient(this.x - 5, 0, this.x + this.width + 5, 0);
+    capGradient.addColorStop(0, '#F49C42'); // Lighter orange
+    capGradient.addColorStop(0.5, pipeCapColor);
+    capGradient.addColorStop(1, '#C86A28'); // Darker orange
+
+    context.fillStyle = capGradient;
     context.fillRect(this.x - 5, this.topHeight - 20, this.width + 10, 20);
 
-    // Draw bottom pipe
-    context.fillStyle = pipeColor;
+    // Draw bottom pipe with gradient
+    const bottomGradient = context.createLinearGradient(this.x, 0, this.x + this.width, 0);
+    bottomGradient.addColorStop(0, pipeHighlight);
+    bottomGradient.addColorStop(0.3, pipeColor);
+    bottomGradient.addColorStop(1, pipeColor);
+
+    context.fillStyle = bottomGradient;
     context.fillRect(this.x, this.topHeight + this.gapSize, this.width, this.bottomHeight);
 
-    // Draw bottom pipe cap
-    context.fillStyle = pipeCapColor;
+    // Draw bottom pipe cap with enhanced styling
+    context.fillStyle = capGradient;
     context.fillRect(this.x - 5, this.topHeight + this.gapSize, this.width + 10, 20);
 
     context.restore();

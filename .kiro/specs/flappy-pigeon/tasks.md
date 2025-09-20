@@ -45,7 +45,7 @@
   - Display current score during gameplay and final score on game over
   - _Requirements: 2.5, 3.1, 3.2, 3.3, 3.4, 3.5_
 
-- [ ] 7. Add visual enhancements and animations
+- [x] 7. Add visual enhancements and animations
   - Implement pigeon wing flapping animation with sprite rotation
   - Add smooth pigeon rotation based on velocity (diving/climbing angles)
   - Create background rendering with simple gradient or pattern

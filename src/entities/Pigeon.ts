@@ -10,6 +10,7 @@ export class Pigeon implements GameEntity {
   private size: number;
   private maxVelocity: number;
   private minVelocity: number;
+  private animationTime: number = 0;
 
   constructor(x: number, y: number) {
     this.x = x;
@@ -29,6 +30,9 @@ export class Pigeon implements GameEntity {
   }
 
   public update(deltaTime: number): void {
+    // Update animation timer for subtle effects
+    this.animationTime += deltaTime;
+
     // Apply gravity
     this.velocity += GAME_CONFIG.GRAVITY * (deltaTime / 16); // Normalize for 60fps
 
@@ -38,8 +42,10 @@ export class Pigeon implements GameEntity {
     // Update position
     this.y += this.velocity * (deltaTime / 16);
 
-    // Update rotation based on velocity (diving/climbing effect)
-    this.rotation = Math.max(-0.5, Math.min(0.5, this.velocity * 0.1));
+    // Enhanced rotation based on velocity with smoother transitions
+    const targetRotation = Math.max(-0.6, Math.min(0.4, this.velocity * 0.12));
+    // Smooth rotation interpolation for more natural movement
+    this.rotation += (targetRotation - this.rotation) * 0.15;
 
     // Reset flapping state
     this.isFlapping = false;
@@ -48,8 +54,11 @@ export class Pigeon implements GameEntity {
   public render(context: CanvasRenderingContext2D): void {
     context.save();
 
-    // Move to pigeon center for rotation
-    context.translate(this.x + this.size / 2, this.y + this.size / 2);
+    // Add subtle floating animation
+    const floatOffset = Math.sin(this.animationTime * 0.003) * 1.5;
+
+    // Move to pigeon center for rotation with floating effect
+    context.translate(this.x + this.size / 2, this.y + this.size / 2 + floatOffset);
     context.rotate(this.rotation);
 
     // Draw pigeon body (more egg-shaped like Pattie)
@@ -142,22 +151,32 @@ export class Pigeon implements GameEntity {
   }
 
   private renderWing(context: CanvasRenderingContext2D): void {
+    // Enhanced wing animation with multiple states
     const wingColor = this.isFlapping ? BRAND_COLORS.darkBlue : BRAND_COLORS.mediumBlue;
     context.fillStyle = wingColor;
-    const wingOffset = this.isFlapping ? -2 : 0;
 
-    // Simple wing shape
+    // More dramatic wing movement
+    const wingOffset = this.isFlapping ? -4 : 0;
+    const wingRotation = this.isFlapping ? -0.4 : -0.1;
+    const wingScale = this.isFlapping ? 1.2 : 1.0;
+
+    context.save();
+    context.translate(-this.size / 10, this.size / 12 + wingOffset);
+    context.rotate(wingRotation);
+    context.scale(wingScale, 1);
+
+    // Main wing shape with enhanced animation
     context.beginPath();
-    context.ellipse(
-      -this.size / 10,
-      this.size / 12 + wingOffset,
-      this.size / 5,
-      this.size / 8,
-      -0.2,
-      0,
-      Math.PI * 2
-    );
+    context.ellipse(0, 0, this.size / 5, this.size / 8, 0, 0, Math.PI * 2);
     context.fill();
+
+    // Wing tip detail that moves more dramatically
+    context.fillStyle = BRAND_COLORS.darkBlue;
+    context.beginPath();
+    context.ellipse(-this.size / 8, 0, this.size / 12, this.size / 16, 0, 0, Math.PI * 2);
+    context.fill();
+
+    context.restore();
   }
 
   private renderTailFeathers(context: CanvasRenderingContext2D): void {

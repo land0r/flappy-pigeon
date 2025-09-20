@@ -79,7 +79,7 @@ export class GameEngine {
     this.lastFrameTime = currentTime;
 
     this.update(deltaTime);
-    this.render();
+    this.render(deltaTime);
 
     this.animationId = requestAnimationFrame(this.gameLoop);
   };
@@ -125,12 +125,13 @@ export class GameEngine {
     }
   }
 
-  private render(): void {
+  private render(deltaTime: number): void {
     // Clear canvas
     this.renderer.clear();
 
-    // Render background
-    this.renderer.renderBackground();
+    // Render background with animation only when playing (clouds pause when game is paused)
+    const animationDeltaTime = this.gameState === GameState.PLAYING ? deltaTime : undefined;
+    this.renderer.renderBackground(animationDeltaTime);
 
     // Render based on current state
     switch (this.gameState) {
