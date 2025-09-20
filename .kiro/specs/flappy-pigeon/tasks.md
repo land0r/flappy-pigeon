@@ -53,7 +53,7 @@
   - Add visual feedback for game state transitions
   - _Requirements: 1.3, 6.4_
 
-- [ ] 8. Implement audio system and sound effects
+- [x] 8. Implement audio system and sound effects
   - Create AudioManager class to handle sound loading and playback
   - Add flapping sound effect that plays when pigeon flaps wings
   - Implement scoring sound effect when pigeon passes through pipes

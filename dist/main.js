@@ -15,8 +15,9 @@ class Application {
             const canvas = this.getCanvasElement();
             // Set canvas dimensions
             this.setupCanvas(canvas);
-            // Create and start the game engine
+            // Create and initialize the game engine
             this.gameEngine = new GameEngine(canvas);
+            await this.gameEngine.initialize();
             this.gameEngine.start();
             // Setup application event handlers
             this.setupEventHandlers();

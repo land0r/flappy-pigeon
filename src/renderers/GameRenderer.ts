@@ -103,7 +103,7 @@ export class GameRenderer {
     this.context.restore();
   }
 
-  public renderGameUI(score: number, velocity: number, pipeCount: number): void {
+  public renderGameUI(score: number, velocity: number, pipeCount: number, isMuted?: boolean): void {
     this.context.save();
 
     // Enhanced score display with background
@@ -111,6 +111,11 @@ export class GameRenderer {
 
     // Enhanced instructions with better styling
     this.renderInstructions();
+
+    // Audio status indicator
+    if (isMuted !== undefined) {
+      this.renderAudioStatus(isMuted);
+    }
 
     // Debug info (smaller and less prominent)
     this.renderDebugInfo(velocity, pipeCount);
@@ -142,7 +147,7 @@ export class GameRenderer {
 
   private renderInstructions(): void {
     this.context.fillStyle = 'rgba(0, 0, 0, 0.6)';
-    this.context.fillRect(5, 5, 200, 50);
+    this.context.fillRect(5, 5, 200, 70);
 
     this.context.fillStyle = '#FFF';
     this.context.font = '14px Arial, sans-serif';
@@ -151,6 +156,30 @@ export class GameRenderer {
     this.context.shadowBlur = 2;
     this.context.fillText('Click or SPACE to flap', 10, 20);
     this.context.fillText('Press P to pause', 10, 40);
+    this.context.fillText('Press M to mute/unmute', 10, 60);
+  }
+
+  private renderAudioStatus(isMuted: boolean): void {
+    // Audio status indicator in top-right corner
+    const x = this.canvas.width - 80;
+    const y = 10;
+
+    // Background
+    this.context.fillStyle = 'rgba(0, 0, 0, 0.6)';
+    this.context.fillRect(x, y, 70, 30);
+
+    // Border
+    this.context.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+    this.context.lineWidth = 1;
+    this.context.strokeRect(x, y, 70, 30);
+
+    // Status text
+    this.context.fillStyle = isMuted ? '#FF6B6B' : '#4ECDC4';
+    this.context.font = '12px Arial, sans-serif';
+    this.context.textAlign = 'center';
+    this.context.shadowColor = 'rgba(0, 0, 0, 0.8)';
+    this.context.shadowBlur = 1;
+    this.context.fillText(isMuted ? '🔇 MUTED' : '🔊 AUDIO', x + 35, y + 20);
   }
 
   private renderDebugInfo(velocity: number, pipeCount: number): void {

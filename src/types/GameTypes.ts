@@ -7,7 +7,10 @@ export enum GameState {
 }
 
 // Input types
-export type InputType = 'flap' | 'pause';
+export type InputType = 'flap' | 'pause' | 'mute';
+
+// Audio types
+export type SoundName = 'flap' | 'score' | 'gameOver';
 
 // Rectangle interface for collision detection
 export interface Rectangle {

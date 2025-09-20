@@ -1,5 +1,6 @@
 import { GAME_CONFIG } from '../config/GameConfig.js';
 import { Pigeon } from '../entities/Pigeon.js';
+import { AudioManager } from '../managers/AudioManager.js';
 import { InputManager } from '../managers/InputManager.js';
 import { PipeManager } from '../managers/PipeManager.js';
 import { ScoreManager } from '../managers/ScoreManager.js';
@@ -14,6 +15,7 @@ export class GameEngine {
   private animationId: number | null;
 
   // Managers and entities
+  private audioManager!: AudioManager;
   private inputManager!: InputManager;
   private pigeon!: Pigeon;
   private pipeManager!: PipeManager;
@@ -36,13 +38,20 @@ export class GameEngine {
     this.lastFrameTime = 0;
     this.animationId = null;
 
-    // Initialize managers and entities
-    this.initializeComponents();
-
     console.log('GameEngine initialized');
   }
 
-  private initializeComponents(): void {
+  public async initialize(): Promise<void> {
+    // Initialize managers and entities
+    await this.initializeComponents();
+    console.log('GameEngine components initialized');
+  }
+
+  private async initializeComponents(): Promise<void> {
+    // Initialize audio manager first
+    this.audioManager = new AudioManager();
+    await this.audioManager.loadSounds();
+
     // Initialize input manager
     this.inputManager = new InputManager();
     this.inputManager.initialize(this.canvas, this.handleInput.bind(this));
@@ -71,6 +80,7 @@ export class GameEngine {
       this.animationId = null;
     }
     this.inputManager.cleanup();
+    this.audioManager.cleanup();
     console.log('Game engine stopped');
   }
 
@@ -122,6 +132,7 @@ export class GameEngine {
     const newScore = this.pipeManager.checkScoring(this.pigeon);
     if (newScore > 0) {
       this.scoreManager.addScore(newScore);
+      this.audioManager.playSound('score');
     }
   }
 
@@ -168,7 +179,8 @@ export class GameEngine {
     this.renderer.renderGameUI(
       this.scoreManager.getCurrentScore(),
       this.pigeon.velocity,
-      this.pipeManager.getPipes().length
+      this.pipeManager.getPipes().length,
+      this.audioManager.isMutedState()
     );
   }
 
@@ -180,6 +192,9 @@ export class GameEngine {
       case 'pause':
         this.handlePauseInput();
         break;
+      case 'mute':
+        this.handleMuteInput();
+        break;
     }
   }
 
@@ -190,6 +205,7 @@ export class GameEngine {
         break;
       case GameState.PLAYING:
         this.pigeon.flap();
+        this.audioManager.playSound('flap');
         break;
       case GameState.GAME_OVER:
         this.restartGame();
@@ -208,6 +224,10 @@ export class GameEngine {
         console.log('Game resumed');
         break;
     }
+  }
+
+  private handleMuteInput(): void {
+    this.audioManager.toggleMute();
   }
 
   private startGame(): void {
@@ -237,8 +257,13 @@ export class GameEngine {
     return this.gameState;
   }
 
+  public getAudioMuteState(): boolean {
+    return this.audioManager.isMutedState();
+  }
+
   public setGameOver(): void {
     this.gameState = GameState.GAME_OVER;
+    this.audioManager.playSound('gameOver');
     console.log('Game over');
   }
 }

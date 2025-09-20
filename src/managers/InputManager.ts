@@ -44,7 +44,7 @@ export class InputManager {
 
   private handleKeyDown(event: KeyboardEvent): void {
     // Prevent default behavior for game keys
-    if (event.code === 'Space' || event.code === 'KeyP') {
+    if (event.code === 'Space' || event.code === 'KeyP' || event.code === 'KeyM') {
       event.preventDefault();
     }
 
@@ -61,6 +61,9 @@ export class InputManager {
         break;
       case 'KeyP':
         this.triggerPauseInput();
+        break;
+      case 'KeyM':
+        this.triggerMuteInput();
         break;
     }
   }
@@ -83,6 +86,12 @@ export class InputManager {
   private triggerPauseInput(): void {
     if (this.inputCallback) {
       this.inputCallback('pause');
+    }
+  }
+
+  private triggerMuteInput(): void {
+    if (this.inputCallback) {
+      this.inputCallback('mute');
     }
   }
 
