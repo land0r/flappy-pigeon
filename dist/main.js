@@ -1,5 +1,5 @@
-import { GameEngine } from './core/GameEngine.js';
 import { GAME_CONFIG } from './config/GameConfig.js';
+import { GameEngine } from './core/GameEngine.js';
 import { GameState } from './types/GameTypes.js';
 /**
  * Main entry point for Flappy Pigeon game

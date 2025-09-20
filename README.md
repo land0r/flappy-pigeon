@@ -37,10 +37,28 @@ npm run serve
 
 ### Development
 
-For development with automatic TypeScript compilation:
+**🔥 Best Development Experience (Hot Reload):**
 ```bash
-npm run watch
+npm run dev
 ```
+This runs TypeScript watch + live-server with automatic browser refresh.
+
+**Individual Commands:**
+```bash
+npm run watch    # TypeScript watch mode only
+npm run serve    # Basic Python server only  
+npm run clean    # Clean build directory
+npm run start    # Build + serve (production-like)
+```
+
+**🚀 Hot Reload Features:**
+- ⚡ **Instant refresh** - Browser reloads automatically on file changes
+- 🔄 **Smart watching** - Monitors dist/ and index.html changes  
+- 🎯 **Fast feedback** - See changes immediately
+
+**VS Code Users:**
+- Press `Ctrl+Shift+P` → "Tasks: Run Task" → "Start Development Server"
+- Or use the integrated TypeScript watch task
 
 ## Game Controls
 
