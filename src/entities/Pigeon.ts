@@ -1,5 +1,5 @@
+import { BRAND_COLORS, GAME_CONFIG } from '../config/GameConfig.js';
 import { GameEntity, Rectangle } from '../types/GameTypes.js';
-import { GAME_CONFIG, BRAND_COLORS } from '../config/GameConfig.js';
 
 export class Pigeon implements GameEntity {
   public x: number;
@@ -52,20 +52,20 @@ export class Pigeon implements GameEntity {
     context.translate(this.x + this.size / 2, this.y + this.size / 2);
     context.rotate(this.rotation);
 
-    // Draw pigeon body (rounded, more bird-like)
+    // Draw pigeon body (more egg-shaped like Pattie)
     context.fillStyle = BRAND_COLORS.mediumBlue;
     context.beginPath();
-    context.ellipse(0, 0, this.size / 2.2, this.size / 2.5, 0, 0, Math.PI * 2);
+    context.ellipse(0, this.size / 12, this.size / 2.5, this.size / 2.2, 0, 0, Math.PI * 2);
     context.fill();
 
-    // Draw pigeon head (slightly overlapping body)
+    // Draw pigeon head/chest area (larger, like Pattie's prominent head)
     context.fillStyle = BRAND_COLORS.lightGray;
     context.beginPath();
     context.ellipse(
-      this.size / 6,
-      -this.size / 6,
-      this.size / 3.5,
-      this.size / 3.5,
+      this.size / 5,
+      -this.size / 8,
+      this.size / 3,
+      this.size / 3.2,
       0,
       0,
       Math.PI * 2
@@ -94,42 +94,30 @@ export class Pigeon implements GameEntity {
   }
 
   private renderHeadFeathers(context: CanvasRenderingContext2D): void {
+    // Same color as head (light gray) and only 2 small feathers like Pattie
     context.fillStyle = BRAND_COLORS.lightGray;
 
-    // Left feather
+    // Left small feather
     context.beginPath();
     context.ellipse(
-      this.size / 12,
-      -this.size / 2.2,
       this.size / 8,
-      this.size / 6,
-      -0.3,
+      -this.size / 2.2,
+      this.size / 20,
+      this.size / 12,
+      -0.2,
       0,
       Math.PI * 2
     );
     context.fill();
 
-    // Right feather
+    // Right small feather
     context.beginPath();
     context.ellipse(
       this.size / 4,
-      -this.size / 2.4,
-      this.size / 10,
-      this.size / 7,
+      -this.size / 2.3,
+      this.size / 20,
+      this.size / 12,
       0.2,
-      0,
-      Math.PI * 2
-    );
-    context.fill();
-
-    // Center feather (tallest)
-    context.beginPath();
-    context.ellipse(
-      this.size / 6,
-      -this.size / 1.9,
-      this.size / 9,
-      this.size / 5,
-      0,
       0,
       Math.PI * 2
     );
@@ -137,56 +125,35 @@ export class Pigeon implements GameEntity {
   }
 
   private renderBeak(context: CanvasRenderingContext2D): void {
-    // Draw beak (orange, more rounded like Pattie)
+    // Draw beak (small, simple triangle like a real pigeon in profile)
     context.fillStyle = BRAND_COLORS.orange;
     context.beginPath();
-    context.ellipse(
-      this.size / 2.2,
-      -this.size / 8,
-      this.size / 8,
-      this.size / 12,
-      0,
-      0,
-      Math.PI * 2
-    );
+    context.moveTo(this.size / 2.2, -this.size / 10);
+    context.lineTo(this.size / 1.8, -this.size / 12);
+    context.lineTo(this.size / 2.2, -this.size / 20);
+    context.closePath();
     context.fill();
 
-    // Draw beak details (nostrils)
-    context.fillStyle = '#D4611A'; // Darker orange for nostrils
+    // Small nostril
+    context.fillStyle = '#D4611A';
     context.beginPath();
-    context.arc(this.size / 2.4, -this.size / 7, 1, 0, Math.PI * 2);
-    context.fill();
-    context.beginPath();
-    context.arc(this.size / 2.4, -this.size / 9, 1, 0, Math.PI * 2);
+    context.arc(this.size / 2.4, -this.size / 15, 0.5, 0, Math.PI * 2);
     context.fill();
   }
 
   private renderWing(context: CanvasRenderingContext2D): void {
     const wingColor = this.isFlapping ? BRAND_COLORS.darkBlue : BRAND_COLORS.mediumBlue;
     context.fillStyle = wingColor;
-    const wingOffset = this.isFlapping ? -3 : 0;
+    const wingOffset = this.isFlapping ? -2 : 0;
 
+    // Simple wing shape
     context.beginPath();
     context.ellipse(
-      -this.size / 8,
+      -this.size / 10,
       this.size / 12 + wingOffset,
-      this.size / 3,
-      this.size / 4.5,
-      -0.3,
-      0,
-      Math.PI * 2
-    );
-    context.fill();
-
-    // Draw wing details
-    context.fillStyle = BRAND_COLORS.darkBlue;
-    context.beginPath();
-    context.ellipse(
-      -this.size / 6,
-      this.size / 10 + wingOffset,
       this.size / 5,
       this.size / 8,
-      -0.3,
+      -0.2,
       0,
       Math.PI * 2
     );
@@ -194,14 +161,15 @@ export class Pigeon implements GameEntity {
   }
 
   private renderTailFeathers(context: CanvasRenderingContext2D): void {
+    // Much smaller, simpler tail
     context.fillStyle = BRAND_COLORS.darkBlue;
     context.beginPath();
     context.ellipse(
-      -this.size / 2.2,
+      -this.size / 2.5,
+      this.size / 12,
+      this.size / 12,
       this.size / 8,
-      this.size / 6,
-      this.size / 3,
-      0.5,
+      0.3,
       0,
       Math.PI * 2
     );
@@ -229,22 +197,17 @@ export class Pigeon implements GameEntity {
   }
 
   private renderChestFeathers(context: CanvasRenderingContext2D): void {
+    // Much simpler chest pattern - just 2 small semicircles
     context.fillStyle = BRAND_COLORS.lightGray;
-    for (let i = 0; i < 3; i++) {
-      const featherY = this.size / 6 + (i * this.size) / 12;
-      const featherX = this.size / 12 + (i * this.size) / 20;
 
-      // Draw overlapping semicircles to create scalloped pattern
-      context.beginPath();
-      context.arc(featherX - this.size / 8, featherY, this.size / 12, Math.PI, 0);
-      context.fill();
-      context.beginPath();
-      context.arc(featherX, featherY, this.size / 12, Math.PI, 0);
-      context.fill();
-      context.beginPath();
-      context.arc(featherX + this.size / 8, featherY, this.size / 12, Math.PI, 0);
-      context.fill();
-    }
+    // Just two small chest feathers
+    context.beginPath();
+    context.arc(-this.size / 12, this.size / 6, this.size / 16, Math.PI, 0);
+    context.fill();
+
+    context.beginPath();
+    context.arc(this.size / 12, this.size / 6, this.size / 16, Math.PI, 0);
+    context.fill();
   }
 
   public getBounds(): Rectangle {

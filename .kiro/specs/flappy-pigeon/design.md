@@ -7,6 +7,7 @@ Flappy Pigeon is a browser-based 2D game built with HTML5 Canvas and TypeScript.
 ## Architecture
 
 ### Technology Stack
+
 - **HTML5 Canvas**: For 2D rendering and game display
 - **TypeScript**: For type-safe game logic and better development experience
 - **Web Audio API**: For sound effects and audio management
@@ -14,7 +15,9 @@ Flappy Pigeon is a browser-based 2D game built with HTML5 Canvas and TypeScript.
 - **No external libraries**: Keeping it simple with vanilla web technologies
 
 ### Core Architecture Pattern
+
 The game follows a classic game loop architecture with these main phases:
+
 1. **Input Processing**: Handle user input (clicks, keyboard)
 2. **Update**: Update game state, physics, and entity positions
 3. **Render**: Draw all game elements to the canvas
@@ -25,13 +28,14 @@ The game follows a classic game loop architecture with these main phases:
 ### Game Engine Core
 
 #### GameEngine Class
+
 ```typescript
 interface GameEngine {
   canvas: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
   gameState: GameState;
   lastFrameTime: number;
-  
+
   start(): void;
   update(deltaTime: number): void;
   render(): void;
@@ -40,18 +44,20 @@ interface GameEngine {
 ```
 
 #### GameState Enum
+
 ```typescript
 enum GameState {
   MENU = 'menu',
   PLAYING = 'playing',
   GAME_OVER = 'game_over',
-  PAUSED = 'paused'
+  PAUSED = 'paused',
 }
 ```
 
 ### Game Entities
 
 #### Pigeon Class
+
 ```typescript
 interface Pigeon {
   x: number;
@@ -59,7 +65,7 @@ interface Pigeon {
   velocity: number;
   rotation: number;
   isFlapping: boolean;
-  
+
   flap(): void;
   update(deltaTime: number): void;
   render(context: CanvasRenderingContext2D): void;
@@ -68,6 +74,7 @@ interface Pigeon {
 ```
 
 #### Pipe Class
+
 ```typescript
 interface Pipe {
   x: number;
@@ -75,7 +82,7 @@ interface Pipe {
   bottomHeight: number;
   gapSize: number;
   passed: boolean;
-  
+
   update(deltaTime: number): void;
   render(context: CanvasRenderingContext2D): void;
   getBounds(): Rectangle[];
@@ -84,12 +91,13 @@ interface Pipe {
 ```
 
 #### PipeManager Class
+
 ```typescript
 interface PipeManager {
   pipes: Pipe[];
   spawnTimer: number;
   spawnInterval: number;
-  
+
   update(deltaTime: number): void;
   render(context: CanvasRenderingContext2D): void;
   reset(): void;
@@ -101,10 +109,11 @@ interface PipeManager {
 ### Systems
 
 #### InputManager Class
+
 ```typescript
 interface InputManager {
   isFlapping: boolean;
-  
+
   initialize(canvas: HTMLCanvasElement): void;
   handleClick(event: MouseEvent): void;
   handleKeyPress(event: KeyboardEvent): void;
@@ -113,11 +122,12 @@ interface InputManager {
 ```
 
 #### AudioManager Class
+
 ```typescript
 interface AudioManager {
   sounds: Map<string, HTMLAudioElement>;
   isMuted: boolean;
-  
+
   loadSounds(): Promise<void>;
   playSound(soundName: string): void;
   toggleMute(): void;
@@ -125,11 +135,12 @@ interface AudioManager {
 ```
 
 #### ScoreManager Class
+
 ```typescript
 interface ScoreManager {
   currentScore: number;
   highScore: number;
-  
+
   addScore(points: number): void;
   reset(): void;
   saveHighScore(): void;
@@ -138,10 +149,11 @@ interface ScoreManager {
 ```
 
 #### Renderer Class
+
 ```typescript
 interface Renderer {
   context: CanvasRenderingContext2D;
-  
+
   clear(): void;
   renderBackground(): void;
   renderUI(score: number, gameState: GameState): void;
@@ -153,6 +165,7 @@ interface Renderer {
 ## Data Models
 
 ### Core Game Constants
+
 ```typescript
 const GAME_CONFIG = {
   CANVAS_WIDTH: 800,
@@ -163,11 +176,12 @@ const GAME_CONFIG = {
   PIPE_GAP: 150,
   PIPE_SPAWN_INTERVAL: 2000, // milliseconds
   PIGEON_SIZE: 40,
-  PIPE_WIDTH: 60
+  PIPE_WIDTH: 60,
 };
 ```
 
 ### Collision Detection
+
 ```typescript
 interface Rectangle {
   x: number;
@@ -183,6 +197,7 @@ interface CollisionDetector {
 ```
 
 ### Game Physics
+
 ```typescript
 interface Physics {
   applyGravity(entity: Pigeon, deltaTime: number): void;
@@ -194,21 +209,25 @@ interface Physics {
 ## Error Handling
 
 ### Canvas Context Validation
+
 - Check for Canvas API support on game initialization
 - Graceful fallback message if Canvas is not supported
 - Validate canvas context creation before starting game loop
 
 ### Audio Error Handling
+
 - Catch and handle audio loading failures
 - Provide silent fallback if Web Audio API is not available
 - Handle audio playback errors without crashing the game
 
 ### Input Validation
+
 - Sanitize and validate all user inputs
 - Handle edge cases for rapid input events
 - Prevent input processing during invalid game states
 
 ### Performance Error Handling
+
 - Monitor frame rate and adjust quality if needed
 - Handle browser tab visibility changes (pause when not visible)
 - Catch and recover from rendering errors
@@ -216,30 +235,35 @@ interface Physics {
 ## Testing Strategy
 
 ### Unit Testing
+
 - **Entity Classes**: Test pigeon physics, pipe movement, collision detection
 - **Game Logic**: Test scoring, game state transitions, input handling
 - **Utility Functions**: Test collision detection, boundary checking, math utilities
 - **Audio System**: Test sound loading, playback, and error handling
 
 ### Integration Testing
+
 - **Game Loop**: Test complete update-render cycle
 - **State Management**: Test transitions between game states
 - **Input-to-Action**: Test input events triggering correct game responses
 - **Score Persistence**: Test high score saving and loading
 
 ### Performance Testing
+
 - **Frame Rate**: Ensure consistent 60 FPS performance
 - **Memory Usage**: Test for memory leaks during extended gameplay
 - **Canvas Rendering**: Test rendering performance with multiple entities
 - **Audio Performance**: Test audio doesn't impact frame rate
 
 ### Browser Compatibility Testing
+
 - Test on major browsers (Chrome, Firefox, Safari, Edge)
 - Test responsive behavior on different screen sizes
 - Test touch input on mobile devices
 - Validate Canvas and Audio API support across browsers
 
 ### User Experience Testing
+
 - **Gameplay Feel**: Test pigeon responsiveness and physics feel natural
 - **Difficulty Curve**: Ensure game is challenging but fair
 - **Visual Clarity**: Test all UI elements are clearly visible
@@ -248,21 +272,25 @@ interface Physics {
 ## Implementation Notes
 
 ### Canvas Optimization
+
 - Use `requestAnimationFrame` for smooth 60 FPS rendering
 - Clear only necessary portions of canvas when possible
 - Pre-render static elements to off-screen canvas for better performance
 
 ### Asset Management
+
 - Use simple colored rectangles initially, can be replaced with sprites later
 - Implement sprite animation system for pigeon wing flapping
 - Consider using CSS for UI elements outside the game canvas
 
 ### Mobile Considerations
+
 - Implement touch event handling for mobile devices
 - Ensure game scales properly on different screen sizes
 - Consider adding virtual controls for mobile if needed
 
 ### Extensibility
+
 - Design allows for easy addition of power-ups or different pigeon types
 - Pipe system can be extended for different obstacle types
 - Score system can be enhanced with achievements or multipliers

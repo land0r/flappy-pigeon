@@ -16,8 +16,8 @@ export default tseslint.config(
       'prefer-const': 'error',
       'no-var': 'error',
       'no-console': 'off',
-      'eqeqeq': ['error', 'always'],
-      'curly': ['error', 'all'],
+      eqeqeq: ['error', 'always'],
+      curly: ['error', 'all'],
     },
   },
   {

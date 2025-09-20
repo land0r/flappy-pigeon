@@ -29,38 +29,45 @@ flappy-pigeon/
 ## Architecture Patterns
 
 ### Entity-Component Pattern
+
 - All game entities implement `GameEntity` interface
 - Common `update(deltaTime)` and `render(context)` methods
 - Position properties (`x`, `y`) on all entities
 
 ### Manager Pattern
+
 - Separate managers for different systems (Input, Pipes, Rendering)
 - Managers handle specific responsibilities and are injected into GameEngine
 - Clean separation of concerns
 
 ### State Pattern
+
 - `GameState` enum defines all possible game states
 - GameEngine switches behavior based on current state
 - Clear state transitions with logging
 
 ### Dependency Injection
+
 - Components receive dependencies through constructors
 - GameEngine orchestrates all managers and entities
 - No global state or singletons
 
 ## File Naming Conventions
+
 - **PascalCase** for class files (`GameEngine.ts`, `PipeManager.ts`)
 - **camelCase** for configuration files (`GameConfig.ts`, `GameTypes.ts`)
 - **kebab-case** for project name and directories
 - **Descriptive names** that indicate purpose (`InputManager`, `GameRenderer`)
 
 ## Import Conventions
+
 - **Explicit `.js` extensions** required in imports (TypeScript ES modules)
 - **Relative imports** for local modules (`./config/GameConfig.js`)
 - **Barrel exports** not used - direct file imports preferred
 - **Type-only imports** when importing only types
 
 ## Code Organization Rules
+
 - **One class per file** with matching filename
 - **Interfaces and types** in dedicated `types/` directory
 - **Constants and configuration** in `config/` directory
