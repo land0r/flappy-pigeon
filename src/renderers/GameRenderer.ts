@@ -41,7 +41,11 @@ export class GameRenderer {
       this.context.font = '20px Arial';
       this.context.fillStyle = '#666';
       this.context.shadowBlur = 1;
-      this.context.fillText(`High Score: ${highScore}`, this.canvas.width / 2, this.canvas.height / 2 - 60);
+      this.context.fillText(
+        `High Score: ${highScore}`,
+        this.canvas.width / 2,
+        this.canvas.height / 2 - 60
+      );
     }
 
     // Instructions
@@ -160,11 +164,19 @@ export class GameRenderer {
     if (scoreData.isNewHigh) {
       this.context.fillStyle = '#FFD700'; // Gold color for new high score
       this.context.font = '24px Arial';
-      this.context.fillText('🎉 NEW HIGH SCORE! 🎉', this.canvas.width / 2, this.canvas.height / 2 + 10);
+      this.context.fillText(
+        '🎉 NEW HIGH SCORE! 🎉',
+        this.canvas.width / 2,
+        this.canvas.height / 2 + 10
+      );
     } else {
       this.context.fillStyle = '#666';
       this.context.font = '20px Arial';
-      this.context.fillText(`High Score: ${scoreData.high}`, this.canvas.width / 2, this.canvas.height / 2 + 10);
+      this.context.fillText(
+        `High Score: ${scoreData.high}`,
+        this.canvas.width / 2,
+        this.canvas.height / 2 + 10
+      );
     }
 
     // Restart instruction
