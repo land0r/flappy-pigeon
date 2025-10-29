@@ -14,10 +14,10 @@ export class Pigeon implements GameEntity {
   private spriteSheet: HTMLImageElement | null = null;
   private frameWidth: number = 0;
   private frameHeight: number = 0;
-  private totalFrames: number = 7;
+  private totalFrames: number = 5;
   private currentFrame: number = 0;
   private frameTimer: number = 0;
-  private frameDelay: number = 100; // milliseconds between frames
+  private frameDelay: number = 120; // milliseconds between frames
   private spriteLoaded: boolean = false;
 
   constructor(x: number, y: number) {
@@ -38,12 +38,12 @@ export class Pigeon implements GameEntity {
       this.frameWidth = this.spriteSheet!.width / this.totalFrames;
       this.frameHeight = this.spriteSheet!.height;
       this.spriteLoaded = true;
-      console.log(`Sprite sheet loaded: ${this.frameWidth}x${this.frameHeight} per frame`);
+      console.log(`New sprite sheet loaded: ${this.frameWidth}x${this.frameHeight} per frame (${this.totalFrames} frames)`);
     };
     this.spriteSheet.onerror = () => {
       console.error('Failed to load pigeon sprite sheet');
     };
-    this.spriteSheet.src = './assets/sprites/pigeon-sprite-sheet.png';
+    this.spriteSheet.src = './assets/sprites/pigeon-sprite.png';
   }
 
   public flap(): void {
@@ -64,9 +64,9 @@ export class Pigeon implements GameEntity {
 
       // Speed up animation when flapping
       if (this.isFlapping) {
-        this.frameDelay = 60; // Faster animation when flapping
+        this.frameDelay = 80; // Faster animation when flapping
       } else {
-        this.frameDelay = 100; // Normal animation speed
+        this.frameDelay = 120; // Normal animation speed
       }
     }
 
